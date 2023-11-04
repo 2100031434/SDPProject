@@ -78,6 +78,9 @@
             	<c:if test="${not empty errorMessage}">
               	<div class="alert alert-danger">${errorMessage}</div>
             	</c:if>
+            	<c:if test="${not empty sessionMessage}">
+              	<div class="alert alert-warning">${sessionMessage}</div>
+            	</c:if>
             </div>
           </div>
             <div class="card">

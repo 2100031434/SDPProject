@@ -707,6 +707,46 @@
               </div>
             </div>
           </div><!-- End Developer Member -->
+          
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="chef-member">
+              <div class="member-img">
+                <img src="assets/img/chefs/venky.jpeg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href="https://www.linkedin.com/in/venkateshu-dasari/"><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Venkateshu Dasari</h4>
+                <span>Full Stack Developer</span>
+                <p>Passionate about creating seamless user experiences and delivering the best of technology.</p>
+              </div>
+            </div>
+          </div><!-- End Developer Member -->
+          
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="chef-member">
+              <div class="member-img">
+                <img src="assets/img/chefs/venky.jpeg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href="https://www.linkedin.com/in/venkateshu-dasari/"><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Venkateshu Dasari</h4>
+                <span>Full Stack Developer</span>
+                <p>Passionate about creating seamless user experiences and delivering the best of technology.</p>
+              </div>
+            </div>
+          </div><!-- End Developer Member -->
+          
+          
         </div>
       </div>
     </section><!-- End About us Section -->

@@ -22,16 +22,20 @@
             <form>
                 <div class="mb-3">
                     <label for="restaurantName" class="form-label">Restaurant Name</label>
-                    <input type="text" class="form-control" id="restaurantName" value="My Restaurant Name">
+                    <input type="text" class="form-control" id="restaurantName" value="${restaurant.name}">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" value="restaurant@example.com" readonly>
+                    <input type="email" class="form-control" id="email" value="${restaurant.email}" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
-                    <input type="tel" class="form-control" id="phone" value="123-456-7890">
+                    <input type="tel" class="form-control" id="phone" value="${restaurant.contactno}">
                 </div>
+               <div class="mb-3">
+				    <label for="address" class="form-label">Address</label>
+				    <textarea class="form-control" id="address">${restaurant.address}</textarea>
+				</div>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
         </div>

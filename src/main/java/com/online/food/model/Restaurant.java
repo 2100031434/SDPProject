@@ -2,13 +2,13 @@ package com.online.food.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Restaurant 
@@ -26,8 +26,8 @@ public class Restaurant
 	private boolean active;
 	@OneToMany(mappedBy = "restaurant") 
 	private List<Orders> orders;
-	@OneToOne
-	private Menu menu;
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Menu> menuItems;
 	public int getId() {
 		return id;
 	}
@@ -76,10 +76,10 @@ public class Restaurant
 	public void setOrders(List<Orders> orders) {
 		this.orders = orders;
 	}
-	public Menu getMenu() {
-		return menu;
+	public List<Menu> getMenuItems() {
+		return menuItems;
 	}
-	public void setMenu(Menu menu) {
-		this.menu = menu;
+	public void setMenuItems(List<Menu> menuItems) {
+		this.menuItems = menuItems;
 	}
 }

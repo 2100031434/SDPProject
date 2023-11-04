@@ -140,79 +140,23 @@
     </div>
 
     <div class="container">
-        <h2 class="text-center mt-4">Visit Restaurant</h2>
-        <div class="row mt-4">
+    <h2 class="text-center mt-4">Visit Restaurant</h2>
+    <div class="row mt-4">
+        <c:forEach items="${rdata}" var="restaurant">
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <!-- 236 x 200 -->
-                    <img src="img/restaurant1.jpg" class="card-img-top" alt="Restaurant 1">
+                    <img src="img/restaurant1.jpg" class="card-img-top" alt="<c:out value="${restaurant.name}" />">
                     <div class="card-body">
-                        <h5 class="card-title">Restaurant A</h5>
-                        <p class="card-text">Italian Cuisine</p>
-                        <a href="#" class="btn btn-primary">View Menu</a>
+                        <h5 class="card-title"><c:out value="${restaurant.name}" /></h5>
+                        <p class="card-text"><c:out value="${restaurant.address}" /></p>
+                        <a href="<c:url value='viewmenu/${restaurant.id}' />" class="btn btn-dark">View Menu</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/restaurant3.jpg" class="card-img-top" alt="Restaurant 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Restaurant B</h5>
-                        <p class="card-text">Mexican Cuisine</p>
-                        <a href="#" class="btn btn-primary">View Menu</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/restaurant4.jpg" class="card-img-top" alt="Restaurant 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Restaurant C</h5>
-                        <p class="card-text">Indian Cuisine</p>
-                        <a href="#" class="btn btn-primary">View Menu</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Add more cards as needed -->
-        </div>
-    </div>
-    
+	        </c:forEach>
+	    </div>
+	</div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                     <!-- 236 x 200 -->
-                    <img src="img/restaurant1.jpg" alt="Restaurant 1" class="card-img-top"> 
-                    <div class="card-body">
-                        <h5 class="card-title">Sitara Grand</h5>
-                        <p class="card-text">JN Road, Rajahmundry</p>
-                        <a href="#" class="btn btn-dark">VISIT</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-               <div class="card">
-                    <img src="img/restaurant3.jpg" alt="Restaurant 1" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Sitara Grand</h5>
-                        <p class="card-text">JN Road, Rajahmundry</p>
-                        <a href="#" class="btn btn-dark">VISIT</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-               <div class="card">
-                    <img src="img/restaurant4.jpg" alt="Restaurant 1" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Sitara Grand</h5>
-                        <p class="card-text">JN Road, Rajahmundry</p>
-                        <a href="#" class="btn btn-dark">VISIT</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
   
   <br/>
 

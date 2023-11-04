@@ -25,4 +25,10 @@ public class CustomerServiceImpl implements CustomerService
 		return customerRepository.checkcustomerlogin(email, pwd);
 	}
 
+	@Override
+	public Customer getcustomerbyid(int id) 
+	{
+		return customerRepository.findById(id).orElse(null);
+	}
+
 }

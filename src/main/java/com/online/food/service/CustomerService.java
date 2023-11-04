@@ -6,4 +6,5 @@ public interface CustomerService
 {
 	public String addcustomer(Customer c);
 	public Customer checkcustomerlogin(String email, String pwd);
+	public Customer getcustomerbyid(int id);
 }

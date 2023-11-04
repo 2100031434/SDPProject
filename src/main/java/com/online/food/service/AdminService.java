@@ -16,6 +16,6 @@ public interface AdminService
 	public String addRestaurant(Restaurant r);
 	public List<Restaurant> getAllRestaurants();
     public Restaurant getRestaurantById(int id);
-    public Restaurant updateRestaurant(int id, String name, String address);
+    public String updateRestaurant(Restaurant restaurant);
     public String deleteRestaurant(int id);
 }

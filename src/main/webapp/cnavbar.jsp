@@ -28,6 +28,11 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  
+    <!-- Font Awesome Icons CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+
 </head>
 <body>
 <!-- ======= Header ======= -->
@@ -70,7 +75,7 @@
         Profile <i class="bi bi-chevron-down"></i>
       </a>
       <ul class="dropdown-menu" aria-labelledby="profile-dropdown">
-        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+        <li><a class="dropdown-item" href="customerprofile">Profile</a></li>
         <li><a class="dropdown-item" href="orders.html">Orders</a></li>
         <li><a class="dropdown-item" href="cart.html">Cart</a></li>
         <li><a class="dropdown-item" href="customerlogout">Logout</a></li>

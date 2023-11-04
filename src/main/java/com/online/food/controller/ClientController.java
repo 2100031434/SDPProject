@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.online.food.model.Admin;
 import com.online.food.model.Customer;
+import com.online.food.model.Menu;
 import com.online.food.model.Restaurant;
 import com.online.food.service.AdminService;
 import com.online.food.service.CustomerService;
@@ -150,7 +151,7 @@ public class ClientController
 	}
 	
 	@PostMapping("checkcustomerlogin")
-	public ModelAndView checkemplogin(HttpServletRequest request)
+	public ModelAndView checkcustomerlogin(HttpServletRequest request)
 	{
 		ModelAndView mv = new ModelAndView();
 		
@@ -188,17 +189,50 @@ public class ClientController
 		String name = (String) session.getAttribute("name"); // name is a session variable
 		//session
 		
-		if (name == null)
-	        return new ModelAndView("redirect:/customerlogin");
-				
+		if (name == null || id == null)
+		{
+			ModelAndView mv = new ModelAndView();
+			mv.setViewName("customerlogin");
+			mv.addObject("sessionMessage", "Session Expired!");
+			return mv;
+		}
+		
 		ModelAndView mv = new ModelAndView();
 	    mv.setViewName("customerdashboard");
 	    
 	    mv.addObject("id", (int)id);
 	    mv.addObject("name", name);
 	    
+	    List<Restaurant> rlist = adminService.getAllRestaurants();
+		mv.addObject("rdata", rlist);
+		
 	    return mv;
 	}
+	
+	@GetMapping("customerprofile")
+	public ModelAndView customerprofile(HttpServletRequest request)
+	{
+		//session 
+		HttpSession session = request.getSession();
+		Integer id = (Integer) session.getAttribute("id"); // id is a session variable
+		String name = (String) session.getAttribute("name"); // name is a session variable
+		Customer customer = customerService.getcustomerbyid(id);
+		//session
+				
+		if (name == null || id == null || customer == null)
+		{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("customerlogin");
+		mv.addObject("sessionMessage", "Session Expired!");
+		return mv;
+		}
+		
+		ModelAndView mv = new ModelAndView();
+	    mv.setViewName("customerprofile");
+	    mv.addObject("customer", customer);
+	    return mv;
+	}
+	
 	
 	@GetMapping("customerlogout")
 	public ModelAndView customerlogout(HttpServletRequest request)
@@ -210,6 +244,7 @@ public class ClientController
 		
 		ModelAndView mv = new ModelAndView();
 	    mv.setViewName("customerlogin");
+	    mv.addObject("successMessage", "Logged Out Successfully!");
 	    return mv;
 	}
 	
@@ -221,6 +256,61 @@ public class ClientController
 		mv.addObject("rdata", rlist);
 		return mv;
 	}
+	
+	@GetMapping("update/{id}")
+    public ModelAndView update(@PathVariable("id") int id)
+    {
+      ModelAndView mv = new ModelAndView("updaterestaurants");
+      
+      Restaurant r = adminService.getRestaurantById(id);
+      
+      mv.addObject("restaurant", r);
+      
+      return mv;
+    }
+    
+    @PostMapping("update/update")
+    public ModelAndView updateaction(HttpServletRequest request)
+    {
+      String msg = null;
+      
+      ModelAndView mv = new ModelAndView();
+      mv.setViewName("redirect:/managerestaurants");
+      
+     try
+     {
+       String name = request.getParameter("name");
+       String email = request.getParameter("email");
+       String pwd = request.getParameter("pwd");
+       String contactno = request.getParameter("contactno");
+       String address = request.getParameter("address");
+       String active = request.getParameter("active");
+       boolean status = Boolean.parseBoolean(active);
+       
+       Restaurant r = new Restaurant();
+       r.setName(name);
+       r.setEmail(email);
+       r.setPassword(pwd);
+       r.setContactno(contactno);
+       r.setAddress(address);
+       r.setActive(status);
+       
+       msg = adminService.updateRestaurant(r);
+        
+       mv.addObject("successMessage",msg);
+       
+     }
+     catch(Exception e)
+     {
+       msg = e.getMessage();
+       
+       mv.setViewName("managerestaurants");
+       mv.addObject("errorMessage",msg);
+     }
+      
+      return mv;
+
+    }
 	
 	@GetMapping("manageorders")
 	public ModelAndView manageorders()
@@ -329,6 +419,11 @@ public class ClientController
 		if(r != null)
 		{
 			mv.setViewName("restaurantdashboard");
+			//session 
+			HttpSession session = request.getSession();
+			session.setAttribute("rid", r.getId()); // rid is a session variable
+			session.setAttribute("rname", r.getName()); // rname is a session variable
+			//session
 		}
 		else
 		{
@@ -340,42 +435,156 @@ public class ClientController
 	}
 	
 	@GetMapping("restaurantdashboard")
-	public ModelAndView restaurantdashboard()
+	public ModelAndView restaurantdashboard(HttpServletRequest request, HttpSession session)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		// Get the restaurant ID from the session
+        Integer rid = (Integer) session.getAttribute("rid");
+        if (rid == null) {
+            mv.setViewName("restaurantlogin");
+            mv.addObject("errorMessage", "Session Expired!");
+            return mv;
+        }
+        
 	    mv.setViewName("restaurantdashboard");
 	    return mv;
 	}
 	
 	@GetMapping("restaurantorders")
-	public ModelAndView restaurantorders()
+	public ModelAndView restaurantorders(HttpSession session)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		// Get the restaurant ID from the session
+        Integer rid = (Integer) session.getAttribute("rid");
+        if (rid == null) {
+            mv.setViewName("restaurantlogin");
+            mv.addObject("errorMessage", "Session Expired!");
+            return mv;
+        }
+        
 	    mv.setViewName("restaurantorders");
 	    return mv;
 	}
 	
 	@GetMapping("managemenu")
-	public ModelAndView managemenu()
+	public ModelAndView managemenu(HttpSession session)
 	{
 		ModelAndView mv = new ModelAndView();
-	    mv.setViewName("managemenu");
+		
+		// Get the restaurant ID from the session
+        Integer rid = (Integer) session.getAttribute("rid");
+        if (rid == null) {
+            mv.setViewName("restaurantlogin");
+            mv.addObject("errorMessage", "Session Expired!");
+            return mv;
+        }
+        
+	    List<Menu> menuItems = restaurantService.getmenuitemsbyrestaurantid(rid);
+        mv.addObject("menuItems", menuItems);
+        mv.setViewName("managemenu");
 	    return mv;
 	}
 	
+	@PostMapping("addmenuitem")
+	public ModelAndView addMenuItem(HttpServletRequest request, HttpSession session) {
+	    ModelAndView mv = new ModelAndView();
+	    
+	    // Get the restaurant ID from the session
+        Integer rid = (Integer) session.getAttribute("rid");
+        if (rid == null) {
+            mv.setViewName("restaurantlogin");
+            mv.addObject("errorMessage", "Session Expired!");
+            return mv;
+        }
+
+	    try {
+	        String name = request.getParameter("itemName");
+	        String category = request.getParameter("itemCategory");
+	        String description = request.getParameter("itemDescription");
+	        double price = Double.parseDouble(request.getParameter("itemPrice"));
+
+	        // Create a new menu item
+	        Menu menu = new Menu();
+	        menu.setItemName(name);
+	        menu.setCategory(category);
+	        menu.setDescription(description);
+	        menu.setPrice(price);
+	 
+
+	        // Call a service method to add the menu item
+	        String msg = restaurantService.addmenuitem(rid, menu);
+	        
+	        // Get the updated list of menu items
+	        List<Menu> menuItems = restaurantService.getmenuitemsbyrestaurantid(rid);
+
+			mv.addObject("successMessage", msg);
+			mv.addObject("menuItems", menuItems);
+			mv.setViewName("managemenu");
+	    } catch (Exception e) {
+	    	// Get the updated list of menu items
+	        List<Menu> menuItems = restaurantService.getmenuitemsbyrestaurantid(rid);
+
+			mv.addObject("errorMessage", "Failed to Add");
+			mv.addObject("menuItems", menuItems);
+			mv.setViewName("managemenu");
+	    }
+	    
+	    return mv;
+	}
+	
+	@GetMapping("deletemenuitem/{menuId}")
+	public String deleteMenuItem(@PathVariable int menuId, HttpSession session) {
+	    // Get the restaurant ID from the session
+	    Integer rid = (Integer) session.getAttribute("rid");
+	    if (rid == null) {
+	        return "redirect:/restaurantlogin";
+	    }
+
+	    try {
+	        // Call a service method to delete the menu item
+	        String msg = restaurantService.deletemenuitem(rid, menuId);
+	        session.setAttribute("successMessage", msg);
+	    } catch (Exception e) {
+	        session.setAttribute("errorMessage", "Failed to delete menu item");
+	    }
+
+	    return "redirect:/managemenu";
+	}
+	
 	@GetMapping("restaurantaccount")
-	public ModelAndView restaurantaccount()
+	public ModelAndView restaurantaccount(HttpSession session)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		// Get the restaurant ID from the session
+        Integer rid = (Integer) session.getAttribute("rid");
+        if (rid == null) {
+            mv.setViewName("restaurantlogin");
+            mv.addObject("errorMessage", "Session Expired!");
+            return mv;
+        }
+        Restaurant restaurant = adminService.getRestaurantById(rid);
+        
 	    mv.setViewName("restaurantaccount");
+	    mv.addObject("restaurant", restaurant);
 	    return mv;
 	}
 	
 	@GetMapping("restaurantlogout")
-	public ModelAndView restaurantlogout()
+	public ModelAndView restaurantlogout(HttpServletRequest request)
 	{
+		HttpSession session = request.getSession();
+		session.removeAttribute("rid");
+		session.removeAttribute("rname");
+		session.invalidate();
+		
 		ModelAndView mv = new ModelAndView();
 	    mv.setViewName("restaurantlogin");
+	    mv.addObject("successMessage", "Logged Out Successfully!");
 	    return mv;
 	}
+	
+	
 }

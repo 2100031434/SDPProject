@@ -45,15 +45,36 @@ public class AdminServiceImpl implements AdminService
 	}
 
 	@Override
-	public Restaurant getRestaurantById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Restaurant getRestaurantById(int id) 
+	{
+		Optional<Restaurant> obj =  restaurantRepository.findById(id);
+        
+        if(obj.isPresent())
+        {
+          Restaurant r = obj.get();
+          
+          return r;
+        }
+        else
+        {
+          return null;
+        }
 	}
 
 	@Override
-	public Restaurant updateRestaurant(int id, String name, String address) {
-		// TODO Auto-generated method stub
-		return null;
+	public String updateRestaurant(Restaurant restaurant) 
+	{
+		Restaurant r = restaurantRepository.findById(restaurant.getId()).get();    
+	    
+	    r.setName(restaurant.getName());
+	    r.setPassword(restaurant.getPassword());
+	    r.setContactno(restaurant.getContactno());
+	    r.setAddress(restaurant.getAddress());
+	    r.setActive(r.isActive());
+	    
+	    restaurantRepository.save(r);
+	    
+	    return "Restaurant Updated Successfully";
 	}
 
 	@Override

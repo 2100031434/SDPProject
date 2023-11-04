@@ -24,6 +24,8 @@
                 <div class="card">
                     <div class="card-body">
                     	<h3 align=center style="color: red">${message}</h3>
+                    	<h3 align=center style="color: yellow">${errorMessage}</h3>
+                    	<h3 align=center style="color: green">${successMessage}</h3>
                         <h5 class="card-title">Restaurant Login</h5>
                         <form method="post" action="checkrestaurantlogin">
                             <div class="mb-3">
