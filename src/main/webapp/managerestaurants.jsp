@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" isELIgnored="false"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%> 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">/
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,8 +20,7 @@
 
         <!-- Search Bar -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search restaurants..." aria-label="Search restaurants">
-            <button class="btn btn-primary" type="button">Search</button>
+            <input type="text" class="form-control" placeholder="Search restaurants..." id="datatable-search-input" aria-label="Search restaurants">
             <button type="button" id="addRestaurantButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#restaurantModal">
 			    Add Restaurant
 			</button>
@@ -57,7 +56,7 @@
         </div>
 
         <!-- Restaurants Table -->
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="datatable">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -153,6 +152,14 @@
             </ul>
         </nav>
     </section>
+    
+<script>
+const instance = new mdb.Datatable(document.getElementById('datatable'), rdata)
+
+document.getElementById('datatable-search-input').addEventListener('input', (e) => {
+  instance.search(e.target.value);
+});
+</script>
 
  <%@ include file="adminfooter.jsp" %>
 </body>

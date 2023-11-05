@@ -94,4 +94,10 @@ public class RestaurantServiceImpl implements RestaurantService
 	        return "Failed to delete menu item: " + e.getMessage();
 	    }
 	}
+
+	@Override
+	public List<Restaurant> findAllWithMenuItems() 
+	{
+		return restaurantRepository.findAllWithMenuItems();
+	}
 }

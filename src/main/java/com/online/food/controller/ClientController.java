@@ -167,7 +167,8 @@ public class ClientController
 			session.setAttribute("id", c.getId()); // id is a session variable
 			session.setAttribute("name", c.getName()); // name is a session variable
 			//session
-			
+			List<Restaurant> rlist = adminService.getAllRestaurants();
+			mv.addObject("rdata", rlist);
 			mv.setViewName("customerdashboard");
 			mv.addObject("name", c.getName());
 		}
@@ -202,12 +203,88 @@ public class ClientController
 	    
 	    mv.addObject("id", (int)id);
 	    mv.addObject("name", name);
-	    
-	    List<Restaurant> rlist = adminService.getAllRestaurants();
-		mv.addObject("rdata", rlist);
+		
+		List<Restaurant> rlist = restaurantService.findAllWithMenuItems();
+	    mv.addObject("rdata", rlist);
 		
 	    return mv;
 	}
+	
+	@GetMapping("viewmenu/{rid}")
+	public ModelAndView viewmenu(@PathVariable("rid") int rid, HttpServletRequest request)
+	{
+		//session 
+		HttpSession session = request.getSession();
+		Integer id = (Integer) session.getAttribute("id"); // id is a session variable
+		String name = (String) session.getAttribute("name"); // name is a session variable
+		Customer customer = customerService.getcustomerbyid(id);
+		//session
+				
+		if (name == null || id == null || customer == null)
+		{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("customerlogin");
+		mv.addObject("sessionMessage", "Session Expired!");
+		return mv;
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		List<Menu> menuItems = restaurantService.getmenuitemsbyrestaurantid(rid);
+        mv.addObject("menuItems", menuItems);
+        
+	    return mv;
+	}
+	
+	@GetMapping("customercart")
+	public ModelAndView customercart( HttpServletRequest request)
+	{
+		//session 
+		HttpSession session = request.getSession();
+		Integer id = (Integer) session.getAttribute("id"); // id is a session variable
+		String name = (String) session.getAttribute("name"); // name is a session variable
+		Customer customer = customerService.getcustomerbyid(id);
+		//session
+				
+		if (name == null || id == null || customer == null)
+		{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("customerlogin");
+		mv.addObject("sessionMessage", "Session Expired!");
+		return mv;
+		}
+		
+		ModelAndView mv = new ModelAndView("customercart");
+       
+        
+	    return mv;
+	}
+	
+	@GetMapping("customerorders")
+	public ModelAndView customerorders( HttpServletRequest request)
+	{
+		//session 
+		HttpSession session = request.getSession();
+		Integer id = (Integer) session.getAttribute("id"); // id is a session variable
+		String name = (String) session.getAttribute("name"); // name is a session variable
+		Customer customer = customerService.getcustomerbyid(id);
+		//session
+				
+		if (name == null || id == null || customer == null)
+		{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("customerlogin");
+		mv.addObject("sessionMessage", "Session Expired!");
+		return mv;
+		}
+		
+		ModelAndView mv = new ModelAndView("customerorders");
+       
+        
+	    return mv;
+	}
+	
+	
+	
 	
 	@GetMapping("customerprofile")
 	public ModelAndView customerprofile(HttpServletRequest request)

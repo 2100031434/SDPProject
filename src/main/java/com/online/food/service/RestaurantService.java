@@ -12,4 +12,6 @@ public interface RestaurantService
 	
 	public List<Menu> getmenuitemsbyrestaurantid(int rid);
 	public String deletemenuitem(int rid, int menuId);
+	
+	public List<Restaurant> findAllWithMenuItems();
 }

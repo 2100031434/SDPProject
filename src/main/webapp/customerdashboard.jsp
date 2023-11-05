@@ -30,6 +30,13 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
   
+  <style>
+  .menu-item-image {
+    max-width: 35px; 
+    max-height: 55px;
+  }
+</style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -138,8 +145,7 @@
             <!-- Add more cards as needed -->
         </div>
     </div>
-
-    <div class="container">
+<div class="container">
     <h2 class="text-center mt-4">Visit Restaurant</h2>
     <div class="row mt-4">
         <c:forEach items="${rdata}" var="restaurant">
@@ -149,19 +155,169 @@
                     <div class="card-body">
                         <h5 class="card-title"><c:out value="${restaurant.name}" /></h5>
                         <p class="card-text"><c:out value="${restaurant.address}" /></p>
-                        <a href="<c:url value='viewmenu/${restaurant.id}' />" class="btn btn-dark">View Menu</a>
+                        <!-- Button to trigger the modal -->
+                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#menuModal${restaurant.id}">View Menu</button>
                     </div>
                 </div>
             </div>
-	        </c:forEach>
-	    </div>
-	</div>
+        </c:forEach>
+    </div>
+</div>
+
+
+
+<c:forEach items="${rdata}" var="restaurant">
+    <!-- Modal for each restaurant -->
+    <div class="modal fade" id="menuModal${restaurant.id}" tabindex="-1" aria-labelledby="menuModalLabel${restaurant.id}" aria-hidden="true">
+        <div class="modal-xl modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="menuModalLabel${restaurant.id}">Menu Items</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <c:choose>
+                        <c:when test="${empty restaurant.menuItems}">
+                            <p>No menu items available.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row">
+                                <c:forEach items="${restaurant.menuItems}" var="menuItem">
+								    <section style="background-color: #eee; padding: 1rem 0;">
+								        <div class="container py-3">
+								            <div class="row justify-content-center">
+								                <div class="col-md-12 col-lg-10">
+								                    <div class="card rounded-3 style="margin-bottom: 1rem; max-width: 300px;">
+								                        <div class="card-body">
+								                            <div class="row">
+								                                <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+								                                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
+								                                        <img src="img/pizza.jpg" class="w-100" alt="${menuItem.itemName}" />
+								                                    </div>
+								                                </div>
+								                                <div class="col-md-6 col-lg-6 col-xl-6">
+								                                    <h6>${menuItem.itemName}</h6>
+								                                    <div class="d-flex flex-row">
+								                                        <div class="text-danger mb-1 me-2">
+								                                            <i class="fa fa-star"></i>
+								                                            <i class="fa fa-star"></i>
+								                                            <i class="fa fa-star"></i>
+								                                            <i class="fa fa-star"></i>
+								                                        </div>
+								                                        <span>310</span>
+								                                    </div>
+								                                    <div class="mb-2 text-muted small">
+								                                        <span>${menuItem.description}</span>
+								                                    </div>
+								                                </div>
+								                                <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+								                                    <div class="d-flex flex-row align-items-center mb-1">
+								                                        <h5 class="mb-1 me-1">Rs.${menuItem.price}</h5>
+								                                    </div>
+								                                    <h6 class="text-success">Free shipping</h6>
+								                                    <div class="d-flex flex-column mt-4">
+								                                        <div class="input-group quantity-input">
+								                                            <button class="btn btn-outline-secondary decrement-quantity" type="button">-</button>
+								                                            <input type="number" class="form-control" value="1" readonly>
+								                                            <button class="btn btn-outline-secondary increment-quantity" type="button">+</button>
+								                                        </div>
+								                                        <button class="btn btn-primary btn-sm add-to-cart-btn" type="button" 
+								                                            data-item="${menuItem.itemName}" data-price="${menuItem.price}">Add to Cart</button>
+								                                    </div>
+								                                </div>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
+								            </div>
+								        </div>
+								    </section>
+								</c:forEach>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="proceedToCheckoutBtn">
+					    Proceed to Checkout
+					</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:forEach>
 
   
   <br/>
 
 <%@ include file="customerfooter.jsp" %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    function addToCart(button, itemName, price) {
+        const quantityInput = $(button).parent().find(".quantity-input input");
+        const quantity = parseInt(quantityInput.val());
+        
+        if (button.text() === "Add to Cart") {
+            totalItems += quantity;
+            totalPrice += price * quantity;
+        } else {
+            totalItems -= quantity;
+            totalPrice -= price * quantity;
+        }
+        
+        updateCartSummary();
+    }
+
+    function updateCartSummary() {
+        $("#total-items").text(totalItems);
+        const totalPriceDisplay = $("#totalPriceDisplay");
+        totalPriceDisplay.text("Total Price: Rs." + totalPrice.toFixed(2));
+    }
+
+    $(document).ready(function () {
+        $(".add-to-cart-btn").click(function () {
+            const button = $(this);
+            const price = parseFloat(button.data("price"));
+            
+            if (button.text() === "Add to Cart") {
+                button.text("Remove from Cart");
+                button.addClass("btn-danger");
+                addToCart(button, button.data("item-name"), price);
+            } else {
+                button.text("Add to Cart");
+                button.removeClass("btn-danger");
+                const quantityInput = button.parent().find(".quantity-input input");
+                quantityInput.val(1);
+                addToCart(button, button.data("item-name"), price);
+            }
+        });
+
+        $(".increment-quantity").click(function () {
+            const quantityInput = $(this).parent().find("input");
+            let currentQuantity = parseInt(quantityInput.val());
+            if (currentQuantity < 10) {
+                quantityInput.val(currentQuantity + 1);
+                addToCart(this, $(this).data("item-name"), parseFloat($(this).data("price")));
+            }
+        });
+
+        $(".decrement-quantity").click(function () {
+            const quantityInput = $(this).parent().find("input");
+            let currentQuantity = parseInt(quantityInput.val());
+            if (currentQuantity > 1) {
+                quantityInput.val(currentQuantity - 1);
+                addToCart(this, $(this).data("item-name"), parseFloat($(this).data("price")));
+            }
+        });
+    });
+</script>
+
+
+
 </body>
 
 </html>

@@ -76,8 +76,8 @@
       </a>
       <ul class="dropdown-menu" aria-labelledby="profile-dropdown">
         <li><a class="dropdown-item" href="customerprofile">Profile</a></li>
-        <li><a class="dropdown-item" href="orders.html">Orders</a></li>
-        <li><a class="dropdown-item" href="cart.html">Cart</a></li>
+        <li><a class="dropdown-item" href="customerorders">Orders</a></li>
+        <li><a class="dropdown-item" href="customercart">Cart</a></li>
         <li><a class="dropdown-item" href="customerlogout">Logout</a></li>
       </ul>
     </div>
